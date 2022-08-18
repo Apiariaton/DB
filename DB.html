@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="DB.css">
+<script>
+//document.getElementById("Me").innerHTML ="John";
+//function changetextNew(){
+//    dicta = {"a":"hi",}
+//    //document.getElementById("Me").innerHTML = //"New";
+//}
+//changetextNew();
+//function changetextOld(){
+//    //document.getElementById("Me").innerHTML = //"Old";
+//}
+//changetextOld();
+   
+var Cube = {
+    "dimensions":"1",
+    "colour":"2",
+    "sound":"3",
+    "motion":"4"};    
+    
+//History of cubes generated for n-back comparison    
+var Cubetracker = [];
+
+//Gathering input from number buttons?
+//.value property?
+//document.getElementById("rp").value;
+
+var rp, nb, sp;
+rp = document.getElementById("rp").value;
+nb = document.getElementById("nb").value; 
+sp = document.getElementById("sp").value;
+
+//Takes inputs from screen 
+var game_settings = {"reps":rp,"nback":nb,"speed":sp};    
+
+    
+//Outputs cube with randomised characteristics
+
+  /// Since I am having difficulties implementing basic cube animation, I will experiment on another html page and transplant into this code
+    //// Sleep function
+    function Sleep(duration){
+    const bmt = new Date;
+    var nt =  new Date;
+    var bs = bmt.getSeconds();
+    if (60 - bs < duration){
+        bs -= 10;
+    } 
+    while ((nt.getSeconds() - 10) - bs < duration){
+    var nt = new Date;
+}
+    return bs, nt.getSeconds();} 
+    
+}
+    
+    
+    
+//Setting up button to listen to click and assert if match between X cube and cubes[-nback] DEBUG
+    
+const btnv = document.querySelector("#Vmatch");
+btnv.addEventListener("click",Vmatch(Cubegenerator()));
+    
+    
+var match = 0;    
+//Write match function to ascertain if latest var cb = Cubegenerator(); var X = game_settings["nb"]; if cb = Cubetracker[-X], return match; else don't - currently for entirety of cube but in future for just visual attributes 
+//DEBUG
+    
+//Write three functions - one takes the previous cube from the array Cubetracker, the next takes the latest cube produced by Cubegenerator() and the final one listens for a button press and ascertains whether there has been a match between the newest cube and the previous cube X
+    
+//Function no 1 - takes the previous cube from the array Cubetracker - if cubetracker too short to permit to allow nb retrieval, returns another value to indicate to the comparison function that a match is impossible
+    
+//Argument for this function
+//argument = game_settings["nback"]
+
+function ReturncbXback(nb){
+if (nb < Cubetracker.length)
+{var e = nb; 
+return Cubetracker[e]}; 
+return "Invalidc"}
+    
+//Function no 2 - returns latest Cube - avoid calling the Cubegenerator function because to do so could mean creating an extra unwanted cube: instead I will retrieve the latest cube via Cubetracker again 
+// Problems with retrieving final item in array - how to retrieve last item in array in JS?
+//Solved
+    
+function Returnlcube(){
+    if (Cubetracker.length > 0)
+        {
+            var lc = Cubetracker[Cubetracker.length - 1];
+            return lc;
+        }
+    return "Invalidc"}
+    
+//Now rewrite comparison function which takes function 1 and function 2, checks their outputs to check for invalidity and if valid, performs a comparison of the arrays to determine does Array1 (Xbackcube == lcube), if does, returns match
+    
+//func1 = ReturncbXback(game_settings["nback"])
+//func 2 = Returnlcube()
+    
+//Needs debugging
+    
+//Returns match even if lc = 10
+    //prcu = 4
+    
+function ComcXblc(func1,func2){
+    var prcu = func1;
+    var lacu = func2;
+    var i = 0;
+    if (prcu == "Invalidc" || lacu == "Invalidc")
+    {
+        return "Invalid";
+    }
+    //Comparison of one array to another
+    //Every int needs to match its equiv
+    if (prcu.length <= 1 || lacu.length <= 1){
+        return "Invalid"
+    }
+    
+    //We can change this for loop to single index if we are testing a match for just one metric e.g. color
+    // (colour,motion, sound, location ) [1]//
+    for (i = 0; i < lacu.length; i++)
+        {
+        if (prcu[i] != lacu[i])    
+            return "Invalid";
+        }
+    return "Match"  
+}
+    
+// Score list - returned at end of game via div element score; targeted by function Comparemandscore() which evaluates if match or invalid on click of button, appends result to score list - another function needed to evaluate score from list at end of game repetitions//
+var sl = [];     
+
+//Needs to be linked to button
+function Comparemandscore()
+    var mpm = ComcXblc(ReturncbXback(game_settings),Returnlcube());
+    sl.push(mpm);
+    
+//Now need to write function to evaluate score from score list sl
+//Also good to evaluate position relative to other people playing game e.g. you score better than X percentage of people// you have shown an x% improvement in your performance
+//This needs to be linked to the end of the repetititons assigned per game
+function Producefinalscore(){
+    var fs = 0;
+    var i = 0;
+    if (sl.length = 0)
+        {
+            return 0;
+        }
+    for (i = 0; i < sl.length; i++)
+        {
+            if (sl[i] == "Invalid")
+            {fs--;}
+            else if (sl[i] == "Match")
+            {fs++;}
+            else
+            {
+    
+            }
+    document.getElementById("screen").value = fs;        
+        }
+    
+//Now need to write function to generate a cube at intervals based on a time specified by the speed user input
+//This function needs to be automatic and disregard the user input
+//Need to look into SetInterval() for this
+//Clear Interval annuls the SetInterval by taking for its argument the name of the variable to which SetInterval() is assigned
+//Engine of the whole game, time-dependent - connected to the start button
+    
+    ///CORRECTING OUTPUT - CHANGE CUBEGENERATOR FUNCTION
+    /// PLAY WITH INSPECT ELEMENT
+    /// RELEVANT FUNCTION IS CUBEGENERATOR
+    
+//1)  Need to ensure cube movement remains within the frame of the screen - RELEVANT IS POSITION - DONE
+    
+//2) - need to develop random color generator to output a string which is "RGB(X,Y,Z)" - RELEVANT IS COLOUR
+    
+//3) need to - X and Y - modify the position output so that it's readable as "50px" or "-50px" -RELEVANT IS POSITION
+
+//4) Need to ascertain how to convey three dimensional movement by shrinking and growing the cube in proportion to the z value w:h = z/2 - RELEVANT IS Z POSITION
+    
+    
+///NEED TO DEBUG CUBEGENERATOR FUNCTION    
+    
+function Cubegenerator(rprob){
+    
+    var duparc = [];
+    var i = 0;
+    var rry = Math.floor(Math.random() * 10);
+    for (i=0;i <= rprob; i++)
+        duparc.push(i);
+    if (Cubetracker.length - game_settings["nback"] >= 0){
+        for (i = 0; i <= duparc.length; i++)
+            {
+                if (duparc[i] == rry)
+                    {
+                        var prci = Cubetracker.length - game_settings["nback"];
+                        return Cubetracker[prci];
+                    }
+            }
+    
+    var Dimensions = [];
+    //dimensions creator
+    var z_pos = "";
+    var z_seed = "";
+    var defzpos = 50;
+    
+    for (var i = 0; i< 2; i++)
+    {Dimensions.push(Math.floor((Math.random() * 300) - (Math.random() * 300)))}
+    
+    for (i = 0; i < Dimensions.length; i++){
+    var ni = (Dimensions[i]).toString();
+    ni += "px";
+    Dimensions[i] = ni;
+    }
+    var z_seed = Math.floor(defzpos * Math.random(1,10));
+    var z_seed = z_seed.toString() + "px";
+    var z_pos = [z_seed,z_seed];
+    
+    Dimensions.push(z_pos);
+    
+    
+    var Colour = [];
+    var rbgco = "";
+    //dimensions creator
+    for (i = 0; i < 3; i++)
+    {Colour.push(Math.floor(Math.random(1,10) * 256));
+    }
+    var rgbco = Colour.toString();
+    var rgbco = "RGB(" + rgbco + ")";
+    Colour = rgbco;
+
+    
+    var Sound = [];
+    //sound creator
+    for (i = 0; i < 1; i++)
+    {Sound.push(Math.floor(Math.random() * 6));}
+        
+    var Motion = [];
+    //motion creator
+    for (i = 0; i < 2; i++){Motion.push(Math.floor(Math.random() * 10));}
+        
+    Cube.dimensions = Dimensions;
+    Cube.colour = Colour;
+    Cube.sound = Sound;
+    Cube.motion = Motion;
+    
+    
+    Cubetracker.push(Cube);
+    return Cube;
+
+    }
+    
+    
+    //// PROCESSING OUTPUT AS A VISUAL ANIMATION
+
+/// Now need to create a function that renders the Cube in 3d
+
+    ///This would unpack the various attr per category and animate the cube accordingly
+    
+/// In terms of rendering cubes, the most effective means might be to alter CSS attributes directly: for context, movement in the X and Y plane are governed by: X -> {position:relative;} var cube = document.getElementById("mycubeid"); mycubeid.style.left = "-100px" left and "100px" for right;    
+
+///mycubeid.style.top = "-100px" going up and "100px" going down; 
+    
+//mycubeid.style.height = "--px"; mycubeid.style.with = "--px" for size;
+//cubos.style.backgroundColor = "RGB(1,100,150)";
+    
+//Need to reset the cube after each modification, restoring the cube to left, top: "0px", height: "50px", "50px", "backgroundColor = "white"    
+    //As Cubegenerator would create another cube, Cubetracker might be preferable 
+
+
+////MAIN FOCUS - ADD SOUND, ADD MOTION
+///TO DO THIS, TRIAL EXPERIMENTS
+    
+function Rendercube(){
+    if (Cubetracker.length < 1)
+        {
+return "Awaiting Cubegenerator function to return Cube to Cubetracker";    
+        }
+    var rqba = Cubetracker[Cubetracker.length - 1];
+    var rqb = document.getElementById("qb");
+    rqb.style.backgroundColor = rqba["colour"];
+    rqb.style.top = rqba["dimensions"][0]; rqb.style.top = rqba["dimensions"][1];
+
+    rqb.style.height = rqba["dimensions"][2][0];
+    rqb.style.width = rqba["dimensions"][2][1];
+    
+    //SOUND IS HERE AND RENDERED FROM CUBE ATTRIBUTES
+    var Soundtable = 
+        {
+            "0":"HTML_files/E.wav",
+            "1": "HTML_files/T.wav",
+            "2": "HTML_files/A.wav",
+           "3": "HTML_files/I.wav",   
+            "4": "HTML_files/H.wav",
+           "5": "HTML_files/R.wav",
+            "6": "HTML_files/M.wav",
+        };  
+
+    var ranno = Cube.sound;
+    var rannos = ranno.toString();
+    var ranson = Soundtable[rannos];
+    var soundtp = new Audio(ranson); 
+    soundtp.play();  
+    
+////NEED TO INSERT ANIMA FUNCTION HERE
+///NEED TO RESOLVE THE MATHS HERE OF HOW TO INPUT MOTION AS A VARIABLE
+    function Anima(){
+    var xmov = Cube["motion"][0];
+    var ymov = Cube["motion"][1];
+    //This is how we know when to make the cube stop moving
+    var ldp = (xmov ** 2) + (ymov ** 2);
+    var ld = Math.floor(Math.sqrt(ldp));
+    const cb = document.getElementById("qb");
+    var sa = setInterval(grad,10);
+    var pos = 0;
+    function grad(){
+    if (pos == ld)    
+    {
+        clearInterval(sa);
+
+    }
+        //Means to introduce chaos to motion
+        var posx = pos * (xmov/ld);
+        var posy = pos * (ymov/ld);
+        cb.style.left = posx + "px";
+        cb.style.top = posy + "px";
+        pos++;
+    }
+}
+    Anima();
+    
+    
+}
+        
+        
+    }
+}
+    ///Still need to write code to reset position and colour of cube
+    //function Reset(){
+    //rqb.style.left = rqba["dimensions"][1];
+    //rqb.style.backgroundColor = "white";
+    //rqb.style.top = "0px";
+    //rqb.style.left = "0px";
+    //}
+    //setTimeout(Reset(),3);
+    
+  
+function Rendernorm(){
+    var rqb = document.getElementById("qb");
+    rqb.style.left = "0px";
+    rqb.style.backgroundColor = "white";
+    rqb.style.top = "0px";
+    rqb.style.height = "50px";
+    rqb.style.width = "50px";
+}
+    
+
+////This function will combine the Cubegenerator function, the Rendercube function, a delay and the Rendernorm function - it will be this function which represents the complete function of cubegeneration
+///Edits to Cubegenerator function()
+///EDIT 1
+    
+        
+///EDIT 2 - need to do
+///FIND AUDIO FILES TO BE ACCESSED VIA DICTIONARY SOUNDTABLE
+///INTRODUCE PLAY-AUDIO TO RENDERCUBE FUNCTION
+///Need to do experiment with accessing sound
+    
+///EDIT 3
+///NOW DONE - NEED TO TAKE ARGUMENTS FOR POS MODIFIERS FROM game_settings["motion"]
+///CONVEY STEADY MOTION CHANGE IN RENDERCUBE FUNCTION, taking (game_settings["speed"] - 1) as total time = x, x/totaldistancereq as determinant for speed of SetInterval()
+//SetInterval(move(),x/totaldistancereq)
+
+
+    
+///EDIT 4
+///Add sleep function to main generator function
+//CREATED SLEEP FUNCTION FOR IMPLEMENTATION In Cubegenerator(); Rendercube(); Sleep(); Rendernorm();
+//This function is to be connected to the start button |
+function Cubemssr//Cube makeshowsleepreset 
+    {
+    var start = 0;
+    while (start < game_settings["reps"]){
+        Cubegenerator();
+        Rendercube();
+        Sleep(game_settings["speed"]);
+        Rendernorm();
+        start++;
+    }
+    Producefinalscore()
+}
+    
+///RENDERNORM()
+    
+
+    
+    
+///EDIT 5 - 
+///PAIR MATCH CUBE FUNCTION WITH BUTTON
+///CREATE MATCH FUNCTION FOR VISUAL, FOR AUDIO AND FOR COLOUR
+///CREATE VISUAL FEEDBACK FOR CORRECT IDENTIFICATION
+    
+///CREATE DELIMITER FUNCTION IN WHICH TO NEST Cubegenerator, Rendercube, Delay, Resetnorm whose ARGUMENT is the game setting repetions; THIS DEFINES NUMBER OF REPETITIONS OF CUBE GEN
+///THIS DELIMITER FUNCTION IS PAIRED TO START BUTTON
+///WHEN THE ORDER OF EXECUTION FLOWS OUT OF THE WHILE LOOP, THE FINAL SCORE FUNCTION IS PRODUCED
+///START FUNCTION SHOULD BE TRIGGERED BY SPACE BAR AND SHIFT
+    
+    
+    
+    
+    
+    
+}
+    
+    
+    
+    
+    
+///Tasks to do 
+
+
+//Need to reset the cube after each modification, restoring the cube to left, top: "0px", height: "50px", "50px", "backgroundColor = "white"
+
+//Need to build in a timer to pause after the cube's disappearance and integrate this same value into the cube generator loop
+//Need to edit code, such that there is a probability the same cube will appear twice rather than just once - build in a probability function within the Cubegenerator funcion
+
+        //match++;
+        //Illuminate green if correct match DEBUG
+        //document.getElementById("# V match").style.backgroundColor = "Green";
+        //Return to original colour after DEBUG
+        
+    //}
+    //catch {
+        
+    //}
+  
+  
+    
+    
+    
+    
+//Start game - organise the appearance of cubes in timely fashion in relation to sp, organise the matching pattern of one cube to another based on user press of button
+        
+//How to add an event listener to a button - const btn = document.querySelector("#idnamebutton"); function Returnf(){return 5;} function Addreturnf(func){var num = func; document.querySelector("#idnameElementtobereplaced") = num;btn.addEventListener("click",Addreturnf(Returnf()));}
+    
+document.getElementById("qb").style.color = "blue";    
+    
+        
+document.getElementById("screen").innerHTML = "Pasta";
+</script>
+</head>
+<body>
+<audio controls id="E"><source src="HTML_files/E.wav" type="audio/wav"></audio>
+<audio controls id= "T" ><source src="HTML_files/T.wav" type="audio/wav"></audio>
+<audio controls  id= "A"><source src="HTML_files/A.wav" type="audio/wav"></audio>
+<audio controls id= "I"><source src="HTML_files/I.wav" type="audio/wav"></audio>
+<audio controls id= "H"><source src="HTML_files/H.wav" type="audio/wav"></audio>
+<audio controls id= "R"><source src="HTML_files/R.wav" type="audio/wav"></audio>
+<audio controls id= "M"><source src="HTML_files/M.wav" type="audio/wav"></audio>
+
+
+    
+    
+    
+
+    <div class="inputs"> RP <input class="settings" type="number" id="rp">NB: <input class="settings" id ="nb" type="number">SP<input class="settings" id="sp" type="number"></div>    
+
+<div id= "Main">
+<div id="screen"><div id="qb">Cubepos</div></div>
+</div>
+
+    <div id = "ui">
+ 
+<button class = "but1" id="Vmatch" onclick="Vmatch(Cubegenerator())">V</button>
+<button class= "but" id="start" onclick="Cubegenerator()">Start</button>
+<button class = "but3" id = "Amatch" onclick="changetextOld()">A</button>
+</div>
+    
+    
+</body>
+</html>
